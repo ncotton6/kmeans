@@ -46,11 +46,11 @@ public class Kmean {
 			System.exit(1);
 		}
 
-		Method[] methods = Data.class.getDeclaredMethods();
-		for (int i = 0; i < methods.length; ++i) {
-			if (methods[i].getAnnotation(UseAttribute.class) != null) {
-				
-			}
-		}
+		// running k = 9
+		double[][] centers = new double[9][];
+		
+		// running k = 32
+		centers = new double[32][];
 	}
+	
 }

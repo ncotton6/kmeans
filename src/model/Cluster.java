@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class Cluster extends ArrayList<Data> {
 
+	private static final long serialVersionUID = 1L;
 	private static Object[] params = new Object[] {};
 	private double[] center = null;
 
@@ -22,7 +23,7 @@ public class Cluster extends ArrayList<Data> {
 		return center;
 	}
 
-	private void generateCenter() throws IllegalAccessException,
+	public double[] generateCenter() throws IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 		Method[] methods = Data.class.getDeclaredMethods();
 		int size = 0;
@@ -38,6 +39,7 @@ public class Cluster extends ArrayList<Data> {
 		}
 		for (int i = 0; i < center.length; ++i)
 			center[i] /= this.size();
+		return getCenter();
 	}
 
 }
