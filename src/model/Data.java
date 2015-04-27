@@ -1,5 +1,8 @@
 package model;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import datareader.CSVValue;
 
 /**
@@ -328,5 +331,19 @@ public class Data {
 	 */
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public double[] getAsPoint() throws IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException {
+		int size = 0;
+		for (Method m : Data.class.getDeclaredMethods())
+			if (m.getAnnotation(UseAttribute.class) != null)
+				++size;
+		double[] point = new double[size];
+		size = 0;
+		for (Method m : Data.class.getDeclaredMethods())
+			if (m.getAnnotation(UseAttribute.class) != null)
+				point[size++] = (double) m.invoke(this, null);
+		return point;
 	}
 }
