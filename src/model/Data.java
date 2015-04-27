@@ -12,7 +12,7 @@ import datareader.CSVValue;
 public class Data {
 
 	private static int idcounter = 1;
-	private int id;
+	private int id = -1;
 	private double seatRow, seatAisle, mealChoice, bodyTemp, urineCloudy,
 			urineDarkness, bmDark, dmHardness, bmFloats, pulseRate,
 			bloodPressure, whtBldCellCnt, nausea, diffSwallowingDryMouth;
@@ -313,5 +313,20 @@ public class Data {
 	@CSVValue(ColumnName = "DIFF SWALLOWING DRY MOUTH", ColumnType = Double.class)
 	public void setDiffSwallowingDryMouth(double diffSwallowingDryMouth) {
 		this.diffSwallowingDryMouth = diffSwallowingDryMouth;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id
+	 *            the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
 }
