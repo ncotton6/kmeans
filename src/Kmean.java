@@ -46,39 +46,11 @@ public class Kmean {
 			System.exit(1);
 		}
 
-		// find the normalization values
 		Method[] methods = Data.class.getDeclaredMethods();
 		for (int i = 0; i < methods.length; ++i) {
 			if (methods[i].getAnnotation(UseAttribute.class) != null) {
-				try {
-					Norm(methods[i]);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				
 			}
 		}
 	}
-
-	/**
-	 * Finds the range of a value for normalization
-	 * 
-	 * @param method
-	 * @throws InvocationTargetException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 */
-	private static void Norm(Method method) throws IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException {
-		double high = Double.NEGATIVE_INFINITY;
-		double low = Double.POSITIVE_INFINITY;
-		for (Data d : data) {
-			double value = (double) method.invoke(d, null);
-			if (high < value)
-				high = value;
-			if (low > value)
-				low = value;
-		}
-		normMap.put(method, new Tuple<Double, Double>(low, high));
-	}
-
 }
