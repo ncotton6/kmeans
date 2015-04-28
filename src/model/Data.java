@@ -346,4 +346,103 @@ public class Data {
 				point[size++] = (double) m.invoke(this, null);
 		return point;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(bloodPressure);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(bmDark);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(bmFloats);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(bodyTemp);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(diffSwallowingDryMouth);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(dmHardness);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + id;
+		temp = Double.doubleToLongBits(mealChoice);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(nausea);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(pulseRate);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(seatAisle);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(seatRow);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(urineCloudy);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(urineDarkness);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(whtBldCellCnt);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Data other = (Data) obj;
+		if (Double.doubleToLongBits(bloodPressure) != Double
+				.doubleToLongBits(other.bloodPressure))
+			return false;
+		if (Double.doubleToLongBits(bmDark) != Double
+				.doubleToLongBits(other.bmDark))
+			return false;
+		if (Double.doubleToLongBits(bmFloats) != Double
+				.doubleToLongBits(other.bmFloats))
+			return false;
+		if (Double.doubleToLongBits(bodyTemp) != Double
+				.doubleToLongBits(other.bodyTemp))
+			return false;
+		if (Double.doubleToLongBits(diffSwallowingDryMouth) != Double
+				.doubleToLongBits(other.diffSwallowingDryMouth))
+			return false;
+		if (Double.doubleToLongBits(dmHardness) != Double
+				.doubleToLongBits(other.dmHardness))
+			return false;
+		if (id != other.id)
+			return false;
+		if (Double.doubleToLongBits(mealChoice) != Double
+				.doubleToLongBits(other.mealChoice))
+			return false;
+		if (Double.doubleToLongBits(nausea) != Double
+				.doubleToLongBits(other.nausea))
+			return false;
+		if (Double.doubleToLongBits(pulseRate) != Double
+				.doubleToLongBits(other.pulseRate))
+			return false;
+		if (Double.doubleToLongBits(seatAisle) != Double
+				.doubleToLongBits(other.seatAisle))
+			return false;
+		if (Double.doubleToLongBits(seatRow) != Double
+				.doubleToLongBits(other.seatRow))
+			return false;
+		if (Double.doubleToLongBits(urineCloudy) != Double
+				.doubleToLongBits(other.urineCloudy))
+			return false;
+		if (Double.doubleToLongBits(urineDarkness) != Double
+				.doubleToLongBits(other.urineDarkness))
+			return false;
+		if (Double.doubleToLongBits(whtBldCellCnt) != Double
+				.doubleToLongBits(other.whtBldCellCnt))
+			return false;
+		return true;
+	}
 }
