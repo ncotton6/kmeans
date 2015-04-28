@@ -72,13 +72,13 @@ public class Kmean {
 		}
 		// running
 		runKmeans(centers, data);
-		// running k = 32
+		// running k = 39
 		// setup
 		Random rand = new Random(100000);
-		while (set.size() < 32) {
+		while (set.size() < 39) {
 			set.add(data.get(rand.nextInt(data.size())));
 		}
-		centers = new double[32][centerLength];
+		centers = new double[39][centerLength];
 		int index = 0;
 		for (Data d : set) {
 			try {
