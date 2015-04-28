@@ -2,13 +2,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
 import datareader.CSVReader;
+import model.Cluster;
 import model.Data;
+import model.Distance;
 import model.Tuple;
 import model.UseAttribute;
 
@@ -67,7 +70,7 @@ public class Kmean {
 			}
 		}
 		// running
-
+		runKmeans(centers, data);
 		// running k = 32
 		// setup
 		Random rand = new Random(100000);
@@ -84,6 +87,95 @@ public class Kmean {
 			}
 		}
 		// running
+		// runKmeans(centers, data);
+	}
+
+	/**
+	 * Runs the Kmeans algorithm on the data that is provided.
+	 * 
+	 * @param centers
+	 * @param data2
+	 */
+	private static void runKmeans(double[][] centers, List<Data> data) {
+		// first run to get start data
+		HashMap<Integer, Cluster> clusters = new HashMap<Integer, Cluster>();
+		for (Data d : data) {
+			Integer closest = getClosestPoint(centers, d);
+			if (!clusters.containsKey(closest))
+				clusters.put(closest, new Cluster());
+			clusters.get(closest).add(d);
+		}
+		for (int i = 0; i < centers.length; ++i) {
+			try {
+				centers[i] = clusters.get(i).generateCenter();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		// repeatedly run until stop condition
+		while (true) {
+			HashMap<Integer, Cluster> cluster2 = new HashMap<Integer, Cluster>();
+			for (Data d : data) {
+				Integer closest = getClosestPoint(centers, d);
+				if (!cluster2.containsKey(closest))
+					cluster2.put(closest, new Cluster());
+				cluster2.get(closest).add(d);
+			}
+			if (identicalSets(clusters, cluster2))
+				break;
+			clusters = cluster2;
+			for (int i = 0; i < centers.length; ++i) {
+				try {
+					centers[i] = clusters.get(i).generateCenter();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		// output the cluster data
+		outputClusters(clusters);
+	}
+
+	private static boolean identicalSets(HashMap<Integer, Cluster> cluster1,
+			HashMap<Integer, Cluster> cluster2) {
+		return true;
+	}
+
+	private static void outputClusters(HashMap<Integer, Cluster> clusters) {
+		Integer[] keys = clusters.keySet()
+				.toArray(new Integer[clusters.size()]);
+		Arrays.sort(keys);
+		for (Integer k : keys) {
+			Cluster c = clusters.get(k);
+			try {
+				System.out.println(Arrays.toString(c.generateCenter()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			for (Data d : c) {
+				System.out.println("\t[id= " + d.getId() + "][row= "
+						+ d.getSeatRow() + "][aisle=" + d.getSeatAisle() + "]");
+			}
+		}
+	}
+
+	private static Integer getClosestPoint(double[][] centers, Data d) {
+		double distance = Double.MAX_VALUE;
+		int index = -1;
+		double[] point = null;
+		try {
+			point = d.getAsPoint();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		for (int i = 0; i < centers.length; ++i) {
+			double temp = Distance.l2(point, centers[i]);
+			if (temp < distance) {
+				distance = temp;
+				index = i;
+			}
+		}
+		return index;
 	}
 
 	/**

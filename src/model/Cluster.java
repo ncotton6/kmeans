@@ -10,6 +10,9 @@ public class Cluster extends ArrayList<Data> {
 	private static Object[] params = new Object[] {};
 	private double[] center = null;
 
+	public Cluster() {
+	}
+
 	public Cluster(Data data) throws IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 		this.add(data);
