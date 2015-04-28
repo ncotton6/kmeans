@@ -12,6 +12,7 @@ import datareader.CSVReader;
 import model.Cluster;
 import model.Data;
 import model.Distance;
+import model.Point;
 import model.Tuple;
 import model.UseAttribute;
 
@@ -87,7 +88,7 @@ public class Kmean {
 			}
 		}
 		// running
-		// runKmeans(centers, data);
+		runKmeans(centers, data);
 	}
 
 	/**
@@ -114,6 +115,7 @@ public class Kmean {
 			}
 		}
 		// repeatedly run until stop condition
+		int count = 0;
 		while (true) {
 			HashMap<Integer, Cluster> cluster2 = new HashMap<Integer, Cluster>();
 			// Get closest point and add to cluster2
@@ -124,7 +126,7 @@ public class Kmean {
 				cluster2.get(closest).add(d);
 			}
             // Stop condition
-			if (identicalSets(clusters, cluster2))
+			if (identicalSets(clusters, cluster2, centers.length))
 				break;
 			clusters = cluster2;
             // Generate centers
@@ -135,9 +137,11 @@ public class Kmean {
 					e.printStackTrace();
 				}
 			}
+			System.out.println("Iteration: "+ count++);
 		}
 		// output the cluster data
 		outputClusters(clusters);
+		System.out.println("====================\n====================\n====================");
 	}
 
     /**
@@ -148,8 +152,23 @@ public class Kmean {
      * @return true (for now)
      */
 	private static boolean identicalSets(HashMap<Integer, Cluster> cluster1,
-			HashMap<Integer, Cluster> cluster2) {
-		return true;
+			HashMap<Integer, Cluster> cluster2, int count) {
+		HashSet<Point> centers = new HashSet<Point>();
+		for(Integer key : cluster1.keySet()){
+			try {
+				centers.add(new Point(cluster1.get(key).generateCenter()));
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		}
+		for(Integer key : cluster2.keySet()){
+			try {
+				centers.add(new Point(cluster2.get(key).generateCenter()));
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		}
+		return centers.size() == count;
 	}
 
     /**
