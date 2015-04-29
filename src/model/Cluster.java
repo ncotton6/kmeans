@@ -16,7 +16,7 @@ public class Cluster extends ArrayList<Data> {
 	public Cluster(Data data) throws IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 		this.add(data);
-		generateCenter();
+		generateCenterAsObject();
 	}
 
 	/**
