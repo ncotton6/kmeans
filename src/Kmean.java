@@ -72,7 +72,8 @@ public class Kmean {
 			}
 		}
 		// running
-		runKmeans(centers, data);
+		Visualize vis9 = new Visualize(runKmeans(centers, data));
+		vis9.makeVisible();
 		// running k = 39
 		// setup
 		Random rand = new Random(100000);
