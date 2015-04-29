@@ -15,6 +15,7 @@ import model.Distance;
 import model.Point;
 import model.Tuple;
 import model.UseAttribute;
+import model.Visualize;
 
 /**
  * The {@link Kmean} application will use the K-means clustering algorithm to
@@ -88,7 +89,8 @@ public class Kmean {
 			}
 		}
 		// running
-		runKmeans(centers, data);
+		Visualize vis39 = new Visualize(runKmeans(centers, data));
+		vis39.makeVisible();
 	}
 
 	/**
@@ -96,8 +98,10 @@ public class Kmean {
 	 * 
 	 * @param centers
 	 * @param data2
+	 * @return
 	 */
-	private static void runKmeans(double[][] centers, List<Data> data) {
+	private static HashMap<Integer, Cluster> runKmeans(double[][] centers,
+			List<Data> data) {
 		// first run to get start data
 		HashMap<Integer, Cluster> clusters = new HashMap<Integer, Cluster>();
 		for (Data d : data) {
@@ -106,7 +110,7 @@ public class Kmean {
 				clusters.put(closest, new Cluster());
 			clusters.get(closest).add(d);
 		}
-        // Generate initial centers
+		// Generate initial centers
 		for (int i = 0; i < centers.length; ++i) {
 			try {
 				centers[i] = clusters.get(i).generateCenter();
@@ -119,17 +123,17 @@ public class Kmean {
 		while (true) {
 			HashMap<Integer, Cluster> cluster2 = new HashMap<Integer, Cluster>();
 			// Get closest point and add to cluster2
-            for (Data d : data) {
+			for (Data d : data) {
 				Integer closest = getClosestPoint(centers, d);
 				if (!cluster2.containsKey(closest))
 					cluster2.put(closest, new Cluster());
 				cluster2.get(closest).add(d);
 			}
-            // Stop condition
+			// Stop condition
 			if (identicalSets(clusters, cluster2, centers.length))
 				break;
 			clusters = cluster2;
-            // Generate centers
+			// Generate centers
 			for (int i = 0; i < centers.length; ++i) {
 				try {
 					centers[i] = clusters.get(i).generateCenter();
@@ -137,51 +141,56 @@ public class Kmean {
 					e.printStackTrace();
 				}
 			}
-			System.out.println("Iteration: "+ count++);
+			System.out.println("Iteration: " + count++);
 		}
 		// output the cluster data
 		outputClusters(clusters);
-		System.out.println("====================\n====================\n====================");
+		System.out
+				.println("====================\n====================\n====================");
+		return clusters;
 	}
 
-    /**
-     * Tests if two clusters are identical.
-     *
-     * @param cluster1 first cluster to test
-     * @param cluster2 second cluster to test
-     * @return true (for now)
-     */
+	/**
+	 * Tests if two clusters are identical.
+	 * 
+	 * @param cluster1
+	 *            first cluster to test
+	 * @param cluster2
+	 *            second cluster to test
+	 * @return true (for now)
+	 */
 	private static boolean identicalSets(HashMap<Integer, Cluster> cluster1,
 			HashMap<Integer, Cluster> cluster2, int count) {
 		HashSet<Point> centers = new HashSet<Point>();
-		for(Integer key : cluster1.keySet()){
+		for (Integer key : cluster1.keySet()) {
 			try {
 				centers.add(new Point(cluster1.get(key).generateCenter()));
-			} catch (Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		for(Integer key : cluster2.keySet()){
+		for (Integer key : cluster2.keySet()) {
 			try {
 				centers.add(new Point(cluster2.get(key).generateCenter()));
-			} catch (Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		return centers.size() == count;
 	}
 
-    /**
-     * Prints information for clusters for a given set of clusters
-     *
-     * @param clusters The collection of clusters
-     */
+	/**
+	 * Prints information for clusters for a given set of clusters
+	 * 
+	 * @param clusters
+	 *            The collection of clusters
+	 */
 	private static void outputClusters(HashMap<Integer, Cluster> clusters) {
 		// Gets the key set for a cluster as an Integer array, and sorts it
-        Integer[] keys = clusters.keySet()
+		Integer[] keys = clusters.keySet()
 				.toArray(new Integer[clusters.size()]);
 		Arrays.sort(keys);
-        // Get clusters based on keys, and print the centers.
+		// Get clusters based on keys, and print the centers.
 		for (Integer k : keys) {
 			Cluster c = clusters.get(k);
 			try {
@@ -189,7 +198,7 @@ public class Kmean {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-            // Print the id, row and aisle data
+			// Print the id, row and aisle data
 			for (Data d : c) {
 				System.out.println("\t[id= " + d.getId() + "][row= "
 						+ d.getSeatRow() + "][aisle=" + d.getSeatAisle() + "]");
@@ -197,26 +206,27 @@ public class Kmean {
 		}
 	}
 
-    /**
-     * Gets the index of the closest point to d given a set of 
-     * data centers.
-     *
-     * @param centers The array of centers (each center is an array)
-     * @param d The data (point)
-     *
-     * @return index of the closest point
-     */
+	/**
+	 * Gets the index of the closest point to d given a set of data centers.
+	 * 
+	 * @param centers
+	 *            The array of centers (each center is an array)
+	 * @param d
+	 *            The data (point)
+	 * 
+	 * @return index of the closest point
+	 */
 	private static Integer getClosestPoint(double[][] centers, Data d) {
-		double distance = Double.MAX_VALUE;     // Minimum distance
-		int index = -1;                         // Index of closest
-		double[] point = null;                  // stores d as point
+		double distance = Double.MAX_VALUE; // Minimum distance
+		int index = -1; // Index of closest
+		double[] point = null; // stores d as point
 		try {
 			point = d.getAsPoint();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        
-        // Loop through centers and get the closest one to d
+
+		// Loop through centers and get the closest one to d
 		for (int i = 0; i < centers.length; ++i) {
 			double temp = Distance.l2(point, centers[i]);
 			if (temp < distance) {
@@ -224,7 +234,7 @@ public class Kmean {
 				index = i;
 			}
 		}
-		return index;   // return the index of the closest center
+		return index; // return the index of the closest center
 	}
 
 	/**
