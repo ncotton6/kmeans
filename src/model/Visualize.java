@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 public class Visualize extends JFrame {
 
+	private static int squareDim = 15;
 	private Random rand = new Random(100000);
 	private Color[] colors = null;
 	private HashMap<Integer, Cluster> clusters;
@@ -39,7 +40,7 @@ public class Visualize extends JFrame {
 	}
 
 	public void makeVisible() {
-		setSize(220, 1020);
+		setSize(squareDim * 10 + 40, squareDim * 51 + 70);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		getContentPane().add(new Squares());
@@ -53,9 +54,25 @@ public class Visualize extends JFrame {
 			for (Integer key : clusters.keySet()) {
 				g2.setColor(colors[key]);
 				for (Data d : clusters.get(key)) {
-					g2.fillRect((int) (d.getSeatAisle() - 1) * 20,
-							(int) (d.getSeatRow() - 1) * 20, 20, 20);
+					g2.fillRect((int) (d.getSeatAisle() - 1) * squareDim,
+							(int) (d.getSeatRow() - 1) * squareDim, squareDim,
+							squareDim);
 				}
+			}
+
+			// rows
+			g2.setColor(Color.BLACK);
+			for (int i = 5; i < 55; i += 5) {
+				g2.drawChars(String.valueOf(i).toCharArray(), 0, String
+						.valueOf(i).length(), squareDim * 10,
+						((i - 1) * squareDim) + 10);
+			}
+
+			// aisles
+			for (int i = 1; i < 11; ++i) {
+				char[] chars = String.valueOf(i).toCharArray();
+				g2.drawChars(chars, 0, chars.length, (i - 1) * squareDim,
+						squareDim * 51 + 20);
 			}
 		}
 	}
