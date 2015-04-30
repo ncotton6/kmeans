@@ -1,8 +1,10 @@
 package model;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
@@ -74,6 +76,11 @@ public class Visualize extends JFrame {
 				g2.drawChars(chars, 0, chars.length, (i - 1) * squareDim,
 						squareDim * 51 + 20);
 			}
+			
+			g2.setColor(Color.RED);
+			g2.setStroke(new BasicStroke(5));
+			g2.drawOval((8-1)*squareDim, (7-1)*squareDim, squareDim, squareDim);
+			g2.drawOval((3-1)*squareDim, (42-1)*squareDim, squareDim, squareDim);
 		}
 	}
 
