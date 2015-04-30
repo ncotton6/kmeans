@@ -13,6 +13,11 @@ public class Cluster extends ArrayList<Data> {
 	public Cluster() {
 	}
 
+    /**
+     * 
+     *
+     * @throws IllegalAccessException
+     */
 	public Cluster(Data data) throws IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 		this.add(data);
@@ -26,6 +31,9 @@ public class Cluster extends ArrayList<Data> {
 		return center;
 	}
 
+    /**
+     * 
+     */
 	public double[] generateCenter() throws IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 		Method[] methods = Data.class.getDeclaredMethods();
@@ -45,6 +53,11 @@ public class Cluster extends ArrayList<Data> {
 		return getCenter();
 	}
 	
+    /**
+     * Generates the sum of squared errors (SSE)
+     *
+     * @return SSE as double
+     */
 	public double sse(){
 		double value = 0;
 		try {
@@ -59,9 +72,27 @@ public class Cluster extends ArrayList<Data> {
 			} catch (Exception e){
 				e.printStackTrace();
 			}
-			value += Distance.l2(center, tempDist);
+			value += sqr(center, tempDist);
 		}
 		return value;
 	}
+    
+    /**
+     * Returns squared sum between two points. Basically 
+     * Euclidean (L2) distance equation without the square root.
+     *
+     * @param a First point
+     * @param b Second point
+     * @return squared sum
+     */
+    private double sqr(double[] a, double[] b)
+    {
+        double n = 0;
+        for(int i = 0; i < a.length; ++i)
+        {
+            n += (a[i]-b[i])*(a[i]-b[i]);
+        }
+        return n;
+    }
 
 }
