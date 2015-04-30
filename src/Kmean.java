@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import datareader.CSVReader;
 import model.Cluster;
@@ -116,6 +117,12 @@ public class Kmean {
 				}
 			};
 			pool.execute(run);
+		}
+		try {
+			pool.awaitTermination(4, TimeUnit.HOURS);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		Visualize vis39 = new Visualize(tv.getCluster());
 		vis39.makeVisible();
