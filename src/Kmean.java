@@ -7,12 +7,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import datareader.CSVReader;
 import model.Cluster;
 import model.Data;
 import model.Distance;
 import model.Point;
+import model.ThreadValue;
 import model.Tuple;
 import model.UseAttribute;
 import model.Visualize;
@@ -53,14 +56,15 @@ public class Kmean {
 			System.exit(1);
 		}
 
-		int centerLength = 0;
+		int tempCenterLength = 0;
 		for (Method m : Data.class.getDeclaredMethods())
 			if (m.getAnnotation(UseAttribute.class) != null)
-				++centerLength;
+				++tempCenterLength;
+		final int centerLength = tempCenterLength;
 
 		// running k = 9
 		// setup
-		HashSet<Data> baseset = new HashSet<Data>();
+		final HashSet<Data> baseset = new HashSet<Data>();
 		double[][] centers = new double[9][centerLength];
 		for (int i = 0; i < initSeeds.length; ++i) {
 			try {
@@ -76,36 +80,44 @@ public class Kmean {
 		vis9.makeVisible();
 		// running k = 39
 		// setup
-		Random rand = new Random(100000);
-		double bestSSE = Double.MAX_VALUE;
-		HashMap<Integer, Cluster> bestClustering = null;
+		final Random rand = new Random(100000);
+		ExecutorService pool = Executors.newFixedThreadPool(8);
+		final ThreadValue tv = new ThreadValue();
 		for (int i = 0; i < 1000; ++i) {
-			HashSet<Data> set = new HashSet<Data>();
-			set.addAll(baseset);
-			while (set.size() < 39) {
-				set.add(data.get(rand.nextInt(data.size())));
-			}
-			centers = new double[39][centerLength];
-			int index = 0;
-			for (Data d : set) {
-				try {
-					centers[index++] = d.getAsPoint();
-				} catch (Exception e) {
-					e.printStackTrace();
+			final int tempi = i;
+			Runnable run = new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					System.out.println(tempi);
+					HashSet<Data> set = new HashSet<Data>();
+					set.addAll(baseset);
+					while (set.size() < 39) {
+						set.add(data.get(rand.nextInt(data.size())));
+					}
+					double[][] centers = new double[39][centerLength];
+					int index = 0;
+					for (Data d : set) {
+						try {
+							centers[index++] = d.getAsPoint();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+					// running
+					HashMap<Integer, Cluster> tempCluster = runKmeans(centers,
+							data);
+					double sse = 0;
+					for (Integer key : tempCluster.keySet()) {
+						sse += tempCluster.get(key).sse();
+					}
+					tv.test(sse, tempCluster);
 				}
-			}
-			// running
-			HashMap<Integer, Cluster> tempCluster = runKmeans(centers, data);
-			double sse = 0;
-			for (Integer key : tempCluster.keySet()) {
-				sse += tempCluster.get(key).sse();
-			}
-			if (sse < bestSSE) {
-				bestSSE = sse;
-				bestClustering = tempCluster;
-			}
+			};
+			pool.execute(run);
 		}
-		Visualize vis39 = new Visualize(bestClustering);
+		Visualize vis39 = new Visualize(tv.getCluster());
 		vis39.makeVisible();
 	}
 
@@ -157,12 +169,12 @@ public class Kmean {
 					e.printStackTrace();
 				}
 			}
-			System.out.println("Iteration: " + count++);
+			// System.out.println("Iteration: " + count++);
 		}
 		// output the cluster data
-		//outputClusters(clusters);
-		System.out
-				.println("====================\n====================\n====================");
+		// outputClusters(clusters);
+		// System.out
+		// .println("====================\n====================\n====================");
 		return clusters;
 	}
 
