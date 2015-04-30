@@ -44,5 +44,24 @@ public class Cluster extends ArrayList<Data> {
 			center[i] /= this.size();
 		return getCenter();
 	}
+	
+	public double sse(){
+		double value = 0;
+		try {
+			double[] center = generateCenter();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		for(Data d : this){
+			double[] tempDist = null;
+			try {
+				tempDist = d.getAsPoint();
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+			value += Distance.l2(center, tempDist);
+		}
+		return value;
+	}
 
 }

@@ -60,13 +60,13 @@ public class Kmean {
 
 		// running k = 9
 		// setup
-		HashSet<Data> set = new HashSet<Data>();
+		HashSet<Data> baseset = new HashSet<Data>();
 		double[][] centers = new double[9][centerLength];
 		for (int i = 0; i < initSeeds.length; ++i) {
 			try {
 				Data d = lookUpPassenger(initSeeds[i][0], initSeeds[i][1]);
 				centers[i] = d.getAsPoint();
-				set.add(d);
+				baseset.add(d);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -77,20 +77,35 @@ public class Kmean {
 		// running k = 39
 		// setup
 		Random rand = new Random(100000);
-		while (set.size() < 39) {
-			set.add(data.get(rand.nextInt(data.size())));
-		}
-		centers = new double[39][centerLength];
-		int index = 0;
-		for (Data d : set) {
-			try {
-				centers[index++] = d.getAsPoint();
-			} catch (Exception e) {
-				e.printStackTrace();
+		double bestSSE = Double.MAX_VALUE;
+		HashMap<Integer, Cluster> bestClustering = null;
+		for (int i = 0; i < 1000; ++i) {
+			HashSet<Data> set = new HashSet<Data>();
+			set.addAll(baseset);
+			while (set.size() < 39) {
+				set.add(data.get(rand.nextInt(data.size())));
+			}
+			centers = new double[39][centerLength];
+			int index = 0;
+			for (Data d : set) {
+				try {
+					centers[index++] = d.getAsPoint();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			// running
+			HashMap<Integer, Cluster> tempCluster = runKmeans(centers, data);
+			double sse = 0;
+			for (Integer key : tempCluster.keySet()) {
+				sse += tempCluster.get(key).sse();
+			}
+			if (sse < bestSSE) {
+				bestSSE = sse;
+				bestClustering = tempCluster;
 			}
 		}
-		// running
-		Visualize vis39 = new Visualize(runKmeans(centers, data));
+		Visualize vis39 = new Visualize(bestClustering);
 		vis39.makeVisible();
 	}
 
@@ -145,7 +160,7 @@ public class Kmean {
 			System.out.println("Iteration: " + count++);
 		}
 		// output the cluster data
-		outputClusters(clusters);
+		//outputClusters(clusters);
 		System.out
 				.println("====================\n====================\n====================");
 		return clusters;
