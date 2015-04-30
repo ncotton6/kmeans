@@ -84,7 +84,7 @@ public class Kmean {
 		final Random rand = new Random(100000);
 		ExecutorService pool = Executors.newFixedThreadPool(8);
 		final ThreadValue tv = new ThreadValue();
-		for (int i = 0; i < 10; ++i) {
+		for (int i = 0; i < 5000; ++i) {
 			final int tempi = i;
 			Runnable run = new Runnable() {
 
@@ -125,6 +125,8 @@ public class Kmean {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("SSE: " + tv.getSse());
+		outputClusters(tv.getCluster());
 		Visualize vis39 = new Visualize(tv.getCluster());
 		vis39.makeVisible();
 	}
