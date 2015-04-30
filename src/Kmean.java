@@ -84,7 +84,7 @@ public class Kmean {
 		final Random rand = new Random(100000);
 		ExecutorService pool = Executors.newFixedThreadPool(8);
 		final ThreadValue tv = new ThreadValue();
-		for (int i = 0; i < 1000; ++i) {
+		for (int i = 0; i < 10; ++i) {
 			final int tempi = i;
 			Runnable run = new Runnable() {
 
@@ -119,6 +119,7 @@ public class Kmean {
 			pool.execute(run);
 		}
 		try {
+			pool.shutdown();
 			pool.awaitTermination(4, TimeUnit.HOURS);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
