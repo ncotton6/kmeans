@@ -1,10 +1,11 @@
 package model;
 
 /**
- * Tuple.java*/
+ * Tuple.java
+ */
 
 /**
- * {@link Tuple} is a helper class that can hold to random objects. This will
+ * {@link Tuple} is a helper class that can hold two random objects. This will
  * normally be used to draw an association between two objects, nesting tuples
  * can allow for more than one association.
  * 

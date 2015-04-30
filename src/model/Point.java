@@ -2,6 +2,9 @@ package model;
 
 import java.util.Arrays;
 
+/**
+ * Simple Point class
+ */
 public class Point {
 
 	private double[] point;

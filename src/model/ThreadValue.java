@@ -2,6 +2,9 @@ package model;
 
 import java.util.HashMap;
 
+/**
+ * Thread value that contains an sse value and cluster value.
+ */
 public class ThreadValue {
 
 	private double sse = Double.MAX_VALUE;

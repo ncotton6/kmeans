@@ -31,7 +31,8 @@ import model.Visualize;
 public class Kmean {
 
 	private static List<Data> data = null;
-	private static HashMap<Method, Tuple<Double, Double>> normMap = new HashMap<Method, Tuple<Double, Double>>();
+	private static HashMap<Method, Tuple<Double, Double>> normMap 
+            = new HashMap<Method, Tuple<Double, Double>>();
 	private static int[][] initSeeds = new int[][] { new int[] { 8, 7 },
 			new int[] { 3, 42 }, new int[] { 1, 1 }, new int[] { 9, 2 },
 			new int[] { 2, 13 }, new int[] { 9, 18 }, new int[] { 2, 33 },
@@ -44,6 +45,7 @@ public class Kmean {
 	 */
 	public static void main(String[] args) {
 
+        // read/parse file
 		try {
 			FileInputStream fis = new FileInputStream(new File(
 					"QANTAS420_DATA__v043_temp_for_class.csv"));
@@ -52,11 +54,14 @@ public class Kmean {
 			e.printStackTrace();
 		}
 
+        // quit if no data
 		if (data == null) {
-			System.out.println("For some reason the data is non existant");
+			System.out.println("For some reason the data is nonexistent.");
 			System.exit(1);
 		}
 
+        // The number of "dimensions" for the centers is equal to
+        // the number of methods in the Data class.
 		int tempCenterLength = 0;
 		for (Method m : Data.class.getDeclaredMethods())
 			if (m.getAnnotation(UseAttribute.class) != null)
@@ -64,7 +69,7 @@ public class Kmean {
 		final int centerLength = tempCenterLength;
 
 		// running k = 9
-		// setup
+		// setup base data points
 		final HashSet<Data> baseset = new HashSet<Data>();
 		double[][] centers = new double[9][centerLength];
 		for (int i = 0; i < initSeeds.length; ++i) {
@@ -76,12 +81,14 @@ public class Kmean {
 				e.printStackTrace();
 			}
 		}
-		// running
+		// run visualizer for k = 9
 		Visualize vis9 = new Visualize(runKmeans(centers, data));
 		vis9.makeVisible();
 		// running k = 39
 		// setup
 		final Random rand = new Random(100000);
+        
+        // Run k = 39 in multiple threads
 		ExecutorService pool = Executors.newFixedThreadPool(8);
 		final ThreadValue tv = new ThreadValue();
 		for (int i = 0; i < 10; ++i) {
@@ -125,6 +132,8 @@ public class Kmean {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        
+        // run visualizer for k = 39
 		Visualize vis39 = new Visualize(tv.getCluster());
 		vis39.makeVisible();
 	}

@@ -1,7 +1,17 @@
 package model;
 
+/**
+ * Contains basic methods for calculating distance
+ */
 public class Distance {
 
+    /**
+     * Find the L1 norm (Manhattan distance) between two points.
+     *
+     * @param point1 First point
+     * @param point2 Second point
+     * @return L1 distance between two points
+     */
 	public static double l1(double[] point1, double[] point2) {
 		double value = 0;
 		if (point1.length != point2.length)
@@ -12,6 +22,13 @@ public class Distance {
 		return value;
 	}
 
+	/**
+     * Find the L2 norm (Euclidean distance) between two points.
+     *
+     * @param point1 First point
+     * @param point2 Second point
+     * @return L2 distance between two points
+     */
 	public static double l2(double[] point1, double[] point2) {
 		double value = 0;
 		if (point1.length != point2.length)
