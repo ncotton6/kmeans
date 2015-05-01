@@ -1,7 +1,13 @@
 package model;
 
-/**
+/*
  * Contains basic methods for calculating distance
+ * 
+ * The {@link Distance} class will be used to make calculating distances far
+ * easier.
+ * 
+ * @author Nathaniel Cotton
+ * 
  */
 public class Distance {
 

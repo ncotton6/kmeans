@@ -4,16 +4,32 @@ import java.util.Arrays;
 
 /**
  * Simple Point class
+ *
+ * This class is just to make comparing double arrays easier than converting to
+ * Double class arrays for comparison. Which doesn't actually work too well
+ * since the Double object arrays don't compare well.
+ * 
+ * @author Nathaniel Cotton
+ * 
  */
 public class Point {
 
+	/* private array to represent the point */
 	private double[] point;
-	
-	public Point(double[] p){
+
+	/**
+	 * Simple constructor for the point class that will just take an array and
+	 * set it.
+	 * 
+	 * @param p
+	 */
+	public Point(double[] p) {
 		this.point = p;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -24,7 +40,9 @@ public class Point {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

@@ -1,3 +1,4 @@
+// imports from java
 import java.io.File;
 import java.io.FileInputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -11,6 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+// imports from classes to use in k-means
 import datareader.CSVReader;
 import model.Cluster;
 import model.Data;
@@ -91,7 +93,7 @@ public class Kmean {
         // Run k = 39 in multiple threads
 		ExecutorService pool = Executors.newFixedThreadPool(8);
 		final ThreadValue tv = new ThreadValue();
-		for (int i = 0; i < 10; ++i) {
+		for (int i = 0; i < 5000; ++i) {
 			final int tempi = i;
 			Runnable run = new Runnable() {
 
@@ -134,6 +136,10 @@ public class Kmean {
 		}
         
         // run visualizer for k = 39
+        
+		System.out.println("SSE: " + tv.getSse());
+		outputClusters(tv.getCluster());
+        
 		Visualize vis39 = new Visualize(tv.getCluster());
 		vis39.makeVisible();
 	}
@@ -285,9 +291,9 @@ public class Kmean {
 	/**
 	 * Finds a passenger by their row and aisle
 	 * 
-	 * @param aisle
-	 * @param row
-	 * @return
+	 * @param aisle Aisle number of the passenger
+	 * @param row Row number of the passenger
+	 * @return Data of the looked up passenger
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException

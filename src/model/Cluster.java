@@ -6,6 +6,12 @@ import java.util.ArrayList;
 
 /**
  * Cluster class
+ *
+ * The {@link Cluster} class will extend the {@link ArrayList} class with will
+ * allow for many data points to belong to the cluster.
+ * 
+ * @author Nathaniel Cotton
+ * 
  */
 public class Cluster extends ArrayList<Data> {
 
@@ -13,14 +19,20 @@ public class Cluster extends ArrayList<Data> {
 	private static Object[] params = new Object[] {};
 	private double[] center = null;
 
+	/**
+	 * simple constructor
+	 */
 	public Cluster() {
 	}
 
-    /**
-     * 
+	/**
+	 * Cluster constructor
      *
-     * @throws IllegalAccessException
-     */
+	 * @param Data the data to pass in
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
 	public Cluster(Data data) throws IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 		this.add(data);
@@ -39,8 +51,9 @@ public class Cluster extends ArrayList<Data> {
     /**
      * Generates a center
      *
-     * @return center
-     */
+	 * Generates a center of mass of the cluster given the location of data
+	 * points.
+	 */
 	public double[] generateCenter() throws IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
             
@@ -65,51 +78,51 @@ public class Cluster extends ArrayList<Data> {
 			center[i] /= this.size();
 		return getCenter();
 	}
-	
-    /**
-     * Generates the sum of squared errors (SSE)
-     *
-     * @return SSE as double
-     */
-	public double sse(){
+
+	/**
+	 * Generates the sum of squared errors (SSE)
+	 * 
+	 * @return SSE as double
+	 */
+	public double sse() {
 		double value = 0;
         // Generate center
 		try {
 			double[] center = generateCenter();
-		} catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
         // For all data, add the square of the difference between
         // the data and the center above to a value, and return
         // the final value.
-		for(Data d : this){
+		for (Data d : this) {
 			double[] tempDist = null;
 			try {
 				tempDist = d.getAsPoint();
-			} catch (Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			value += sqr(center, tempDist);
 		}
 		return value;
 	}
-    
-    /**
-     * Returns squared sum between two points. Basically 
-     * Euclidean (L2) distance equation without the square root.
-     *
-     * @param a First point
-     * @param b Second point
-     * @return squared sum
-     */
-    private double sqr(double[] a, double[] b)
-    {
-        double n = 0;
-        for(int i = 0; i < a.length; ++i)
-        {
-            n += (a[i]-b[i])*(a[i]-b[i]);
-        }
-        return n;
-    }
+
+	/**
+	 * Returns squared sum between two points. Basically Euclidean (L2) distance
+	 * equation without the square root.
+	 * 
+	 * @param a
+	 *            First point
+	 * @param b
+	 *            Second point
+	 * @return squared sum
+	 */
+	private double sqr(double[] a, double[] b) {
+		double n = 0;
+		for (int i = 0; i < a.length; ++i) {
+			n += (a[i] - b[i]) * (a[i] - b[i]);
+		}
+		return n;
+	}
 
 }
