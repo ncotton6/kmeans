@@ -2,6 +2,14 @@ package model;
 
 import java.util.HashMap;
 
+/**
+ * The {@link ThreadValue} class has no purpose other than being an area that
+ * threads can use to store the best clustering. This makes multithreading
+ * easier.
+ * 
+ * @author Nathaniel Cotton
+ * 
+ */
 public class ThreadValue {
 
 	private double sse = Double.MAX_VALUE;
@@ -37,6 +45,12 @@ public class ThreadValue {
 		this.cluster = cluster;
 	}
 
+	/**
+	 * Tests if the SSE value is less than the previous values
+	 * 
+	 * @param sse
+	 * @param cluster
+	 */
 	public synchronized void test(double sse, HashMap<Integer, Cluster> cluster) {
 		if (sse < this.sse) {
 			this.sse = sse;
